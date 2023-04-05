@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include ohada *.css
+recursive-include ohada *.csv
+recursive-include ohada *.html
+recursive-include ohada *.ico
+recursive-include ohada *.js
+recursive-include ohada *.json
+recursive-include ohada *.md
+recursive-include ohada *.png
+recursive-include ohada *.py
+recursive-include ohada *.svg
+recursive-include ohada *.txt
+recursive-exclude ohada *.pyc
