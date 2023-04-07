@@ -1,0 +1,13 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "GL Entry",
+  "enabled": 1,
+  "modified": "2023-04-07 12:15:08.823611",
+  "module": null,
+  "name": "Fix GL entry Exchange Rate",
+  "script": "frappe.listview_settings['GL Entry'] = {\r\n\r\n    onload: function (listview) {\r\n\r\n        // Add a button for doing something useful.\r\n        listview.page.add_inner_button(__(\"Regulariser les taux de r\u00e9f\u00e9rence\"), function () {\r\n                        frappe.call({\r\n                                //doc: cur_frm.doc,\r\n                                method: 'ohada.override.gl_entry.fix_exchange_rate',\r\n                                freeze: true,\r\n                                callback: function() {\r\n                                        cur_list.refresh();\r\n                                }\r\n                        });  // change to your function's name\r\n        },__('Utilitaires'))//.addClass(\"btn-warning\").css({'background-color':'#2490EF','color':'white','font-weight': 'normal'});\r\n        // The .addClass above is optional.  It just adds styles to the button.\r\n    }\r\n};",
+  "view": "List"
+ }
+]
