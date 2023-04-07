@@ -94,9 +94,9 @@ app_license = "MIT"
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-#	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+override_doctype_class = {
+    "GL Entry": "ohada.override.gl_entry.CustomGLEntry",
+}
 
 # Document Events
 # ---------------
@@ -190,3 +190,11 @@ app_license = "MIT"
 # auth_hooks = [
 #	"ohada.auth.validate"
 # ]
+
+fixtures = [
+    "Custom Field",
+    "Client Script",
+    #"Server Script",
+    {"dt": "Server Script", "filters": [["disabled", "=", 0]]},
+]
+
