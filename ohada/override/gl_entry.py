@@ -5,7 +5,7 @@ from erpnext.setup.utils import get_exchange_rate
 class CustomGLEntry(GLEntry):
 
     def before_insert(self):
-        #self.taux_reference = get_exchange_rate(self.account_currency,self.reference_currency,self.posting_date)
+        self.taux_reference = get_exchange_rate(self.account_currency,self.reference_currency,self.posting_date)
         pass
 
 @frappe.whitelist()
