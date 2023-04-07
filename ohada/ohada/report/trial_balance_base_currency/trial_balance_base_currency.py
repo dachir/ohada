@@ -11,7 +11,7 @@ from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_accounting_dimensions,
 	get_dimension_with_children,
 )
-from ohada.ohada.report.financial_statements_ohada import (
+from ohada.ohada.report.financial_statements_base_currency import (
 	filter_accounts,
 	filter_out_zero_value_rows,
 	set_gl_entries_by_account,
@@ -88,7 +88,7 @@ def get_data(filters):
 		filters.company,
 		as_dict=True,
 	)
-	company_currency = frappe.db.get_value("Company", filters.company, "reference_currency", cache=True)
+	company_currency = filters.presentation_currency or erpnext.get_company_currency(filters.company)
 
 	if not accounts:
 		return None
@@ -198,7 +198,7 @@ def get_rootwise_opening_balances(filters, report_type):
 	gle = frappe.db.sql(
 		"""
 		select
-			account, sum(debit_in_account_currency * taux_reference) as opening_debit, sum(credit_in_account_currency * taux_reference) as opening_credit
+			account, sum(debit) as opening_debit, sum(credit) as opening_credit
 		from `tabGL Entry`
 		where
 			company=%(company)s
@@ -226,8 +226,8 @@ def calculate_values(accounts, gl_entries_by_account, opening_balances, filters,
 		"opening_credit": 0.0,
 		"debit": 0.0,
 		"credit": 0.0,
-		"period_debit": 0.0,
-		"period_credit": 0.0,
+		"period_debit":0.0,
+		"period_credit":0.0,
 		"closing_debit": 0.0,
 		"closing_credit": 0.0,
 	}
@@ -240,8 +240,8 @@ def calculate_values(accounts, gl_entries_by_account, opening_balances, filters,
 		"opening_credit": 0.0,
 		"debit": 0.0,
 		"credit": 0.0,
-		"period_debit": 0.0,
-		"period_credit": 0.0,
+		"period_debit":0.0,
+		"period_credit":0.0,
 		"closing_debit": 0.0,
 		"closing_credit": 0.0,
 		"parent_account": None,
@@ -259,8 +259,8 @@ def calculate_values(accounts, gl_entries_by_account, opening_balances, filters,
 
 		for entry in gl_entries_by_account.get(d.name, []):
 			if cstr(entry.is_opening) != "Yes":
-				d["debit"] += flt(entry.debit_in_account_currency * entry.taux_reference) 
-				d["credit"] += flt(entry.credit_in_account_currency * entry.taux_reference) 
+				d["debit"] += flt(entry.debit)
+				d["credit"] += flt(entry.credit)
 
 		if (d["debit"] - d["credit"]) >= 0:
 			d["period_debit"] = abs(d["debit"] - d["credit"])
